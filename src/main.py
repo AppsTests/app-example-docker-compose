@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 from fastapi.params import Depends
 from starlette.responses import JSONResponse
 import uvicorn
@@ -18,6 +19,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.get("/", response_class=PlainTextResponse)
+async def root():
+    return "Timeweb Cloud + Docker Compose + FastAPI = ❤️"
 
 @app.get("/dog/{id}")
 async def get_a_dog(id: str, dog_repo: DogRepository = Depends(get_dog_repository)) -> Dog:
